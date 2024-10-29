@@ -14,8 +14,7 @@ const appName=computed(()=>page.props.appName)
       <ul class="nav nav-pills">
         <li class="nav-item"><Link href="/" :class="{'nav-link active':$page.url==='/','nav-link':$page.url != '/'}"  aria-current="page">Басты бет</Link></li>
         <li class="nav-item"><Link href="/quiz" :class="{'nav-link active':$page.url==='/quiz','nav-link':$page.url != '/quiz'}">Тест</Link></li>
-        <li class="nav-item"><Link href="/questions" :class="{'nav-link active':$page.url==='/questions','nav-link':$page.url != '/questions'}">Сұрақтар</Link></li>
-        <li class="nav-item"><Link href="/results" :class="{'nav-link active':$page.url==='/results','nav-link':$page.url != '/results'}">Жауаптар</Link></li>
+        <li class="nav-item"><Link href="/leaderboard" :class="{'nav-link active':$page.url==='/leaderboard','nav-link':$page.url != '/leaderboard'}">Лидеры</Link></li>
       </ul>
     </header>
 </template>
