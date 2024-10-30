@@ -13,12 +13,13 @@ class QuizController extends Controller
      */
     public function index()
     {
-        $questions = Question::with(['answers' => function($query) {
+        $questions = Question::with(['answers' => function ($query) {
             $query->inRandomOrder();
         }])->inRandomOrder()->get();
 
         return Inertia::render('Quiz', [
             'questions' => $questions,
+            // 'user_id' => auth()->id(),
         ]);
     }
 
@@ -27,18 +28,18 @@ class QuizController extends Controller
      */
     public function leaderBoard()
     {
-        // Получаем данные о лидерах из сессии
-        $leaderboard = session()->get('leaderboard', []);
-
-        // Сортируем лидеров по наибольшему проценту в порядке убывания
-        usort($leaderboard, function($a, $b) {
-            return $b['percentage'] <=> $a['percentage'];
-        });
+        // Получаем топ-10 пользователей с наибольшими баллами
+        $leaderboard = \App\Models\User::select('name', 'score')
+            ->whereNotNull('score')
+            ->orderByDesc('score')
+            ->limit(10)
+            ->get();
 
         return Inertia::render('LeaderBoard', [
             'leaderboard' => $leaderboard,
         ]);
     }
+
 
     /**
      * Show quiz results and update leaderboard.
@@ -57,17 +58,14 @@ class QuizController extends Controller
             default => 'Қалай мұнда келдің?'
         };
 
-        // Получаем имя пользователя (например, из запроса или сессии)
-        $username = $request->input('username', 'Аноним');
+        // Получаем текущего пользователя
+        $user = auth()->user();
 
-        // Обновляем таблицу лидеров в сессии
-        $leaderboard = session()->get('leaderboard', []);
-        $leaderboard[] = [
-            'username' => $username,
-            'percentage' => $percentage,
-            'comment' => $comment,
-        ];
-        session()->put('leaderboard', $leaderboard);
+        // Обновляем результат пользователя в базе данных
+        if ($user) {
+            $user->score = $percentage;
+            $user->save();
+        }
 
         return Inertia::render('Result', [
             'percentage' => $percentage,

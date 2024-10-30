@@ -1,88 +1,92 @@
 <script setup>
- import Layout from '@/Shared/Layout.vue'
+import Layout from '@/Shared/Layout.vue'
 import { router } from '@inertiajs/vue3';
- import {ref,computed} from 'vue'
- const props=defineProps({
-    questions:Object
- })
- const currentIndex=ref(0)
- const totalQuestions=computed(()=>props.questions.length)
- const currentQuestion= computed(()=>{
+import { ref, computed } from 'vue'
+const props = defineProps({
+    questions: Object
+})
+const currentIndex = ref(0)
+const totalQuestions = computed(() => props.questions.length)
+const currentQuestion = computed(() => {
     return props.questions[currentIndex.value]
- })
- const isLastQuestion=computed(()=>currentIndex.value===props.questions.length-1)
+})
+const isLastQuestion = computed(() => currentIndex.value === props.questions.length - 1)
 
- const answers=computed(()=>{
+const answers = computed(() => {
     return props.questions[currentIndex.value].answers
- })
+})
 
 
- const selectedAnswer=ref(null)
- const result=ref(0)
- function selectedOption(index){
+const selectedAnswer = ref(null)
+const result = ref(0)
+function selectedOption(index) {
     //alert(index)
-   selectedAnswer.value=index
- }
+    selectedAnswer.value = index
+}
 
- function nextQuestion(){
-   if(selectedAnswer.value !==null){
+function nextQuestion() {
+    if (selectedAnswer.value !== null) {
 
-     if(props.questions[currentIndex.value].answers[selectedAnswer.value].correct_answer==1){
+        if (props.questions[currentIndex.value].answers[selectedAnswer.value].correct_answer == 1) {
+            result.value++;
+        }
+        currentIndex.value++;
+        selectedAnswer.value = null
+    }
+}
+
+function calculateResult() {
+    if (props.questions[currentIndex.value].answers[selectedAnswer.value].correct_answer == 1) {
         result.value++;
-     }
-     currentIndex.value++;
-     selectedAnswer.value=null
-   }
- }
+    }
 
- function calculateResult(){
-    if(props.questions[currentIndex.value].answers[selectedAnswer.value].correct_answer==1){
-        result.value++;
-     }
-
-     router.post('/results',[
+    router.post('/results', [
         {
-            results:{
-                'score':result.value,
-                'totalQuestions':totalQuestions.value
+            results: {
+                'score': result.value,
+                'totalQuestions': totalQuestions.value
             }
         }
-     ])
- }
+    ])
+}
 
 </script>
 <template>
-  <Layout>
-    <div class=" d-flex justify-content-center "> {{currentIndex+1}} сұрақ {{totalQuestions}} сұрақтар ішінен</div>
-    <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
-  <div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-      <div class="d-flex gap-2 w-100 justify-content-between">
-        <div>
-          <h6 class="mb-0">{{currentQuestion.question}}</h6>
+    <Layout>
+        <div class=" d-flex justify-content-center "> {{ currentIndex + 1 }} сұрақ {{ totalQuestions }} сұрақтар ішінен</div>
+        <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <div class="d-flex gap-2 w-100 justify-content-between">
+                        <div>
+                            <h6 class="mb-0">{{ currentQuestion.question }}</h6>
+                        </div>
+                    </div>
+                </a>
+                <a @click="selectedOption(index)" v-for="(answer, index) in answers"
+                    :class="{ 'selected': index === selectedAnswer }"
+                    class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <div class="d-flex gap-2 w-100 justify-content-between">
+                        <div>
+                            <p style="cursor: pointer;" class="mb-0 opacity-75">{{ answer.answer }}</p>
+                        </div>
+                    </div>
+                </a>
+                <div>
+                    <button style="margin-top: 20px;" @click="nextQuestion" v-if="!isLastQuestion"
+                        class="btn btn-primary">Келесі</button>
+                    <button style="margin-top: 20px;" @click="calculateResult" v-if="isLastQuestion"
+                        class="btn btn-success">Жіберу</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </a>
-    <a @click="selectedOption(index)" v-for="(answer,index) in answers"  :class="{'selected': index===selectedAnswer}" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-      <div  class="d-flex gap-2 w-100 justify-content-between">
-        <div  >
-          <p style="cursor: pointer;" class="mb-0 opacity-75">{{ answer.answer }}</p>
-        </div>
-      </div>
-    </a>
-    <div>
-    <button style="margin-top: 20px;" @click="nextQuestion" v-if="!isLastQuestion" class="btn btn-primary">Келесі</button>
-    <button style="margin-top: 20px;" @click="calculateResult" v-if="isLastQuestion" class="btn btn-success">Жіберу</button>
-</div>
-  </div>
-</div>
 
-  </Layout>
+    </Layout>
 </template>
 
 <style scoped>
- .selected{
-  background-color:green;
-  color:white;
- }
+.selected {
+    background-color: green;
+    color: white;
+}
 </style>

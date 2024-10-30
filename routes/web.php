@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\QuizController;
-
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,13 +21,16 @@ Route::get('/', function () {
     return Inertia('Home');
 });
 
+Route::post('/create-user', [UserController::class, 'store'])->name('user.store');
+
+
 Route::get('/questions',[QuestionController::class,'index'])->name('questions');
 Route::post('/questions',[QuestionController::class,'store']);
 Route::put('/questions',[QuestionController::class,'update']);
 Route::delete('/questions/{question}',[QuestionController::class,'destroy']);
 Route::put('/answers',[AnswerController::class,'update']);
 
-Route::get('quiz',[QuizController::class,'index']);
+Route::get('/quiz',[QuizController::class,'index'])->name('quiz');
 Route::post('/results',[QuizController::class,'results']);
 
 Route::get('/leaderboard',[QuizController::class,'leaderBoard']);

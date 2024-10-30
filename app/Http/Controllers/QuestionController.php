@@ -15,9 +15,9 @@ class QuestionController extends Controller
     {
         $questions=Question::with('answers')->get();
         return Inertia::render('Questions',[
-            'questions'=>$questions
+            'questions'=>$questions,
         ]);
-        
+
     }
 
     /**
@@ -75,7 +75,7 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        
+
         $id=$request['id'];
         $editQuestion=Question::findOrFail($id);
         $editQuestion->question= $request['question'];
