@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Question;
+use App\Models\User;
 use Inertia\Inertia;
 
 class QuizController extends Controller
@@ -19,7 +20,6 @@ class QuizController extends Controller
 
         return Inertia::render('Quiz', [
             'questions' => $questions,
-            // 'user_id' => auth()->id(),
         ]);
     }
 
@@ -32,7 +32,6 @@ class QuizController extends Controller
         $leaderboard = \App\Models\User::select('name', 'score')
             ->whereNotNull('score')
             ->orderByDesc('score')
-            ->limit(10)
             ->get();
 
         return Inertia::render('LeaderBoard', [
@@ -59,13 +58,16 @@ class QuizController extends Controller
         };
 
         // Получаем текущего пользователя
-        $user = auth()->user();
+        $userId = session('user_id');
 
-        // Обновляем результат пользователя в базе данных
+        // Находим пользователя по ID из сессии
+        $user = User::find($userId);
+
         if ($user) {
             $user->score = $percentage;
             $user->save();
         }
+
 
         return Inertia::render('Result', [
             'percentage' => $percentage,

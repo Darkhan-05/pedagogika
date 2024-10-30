@@ -16,6 +16,5 @@ class UserController extends Controller
 
         // Сохранение ID пользователя в сессии (если нужно использовать его для дальнейших действий)
         session(['user_id' => $user->id]);
-
     }
 }
