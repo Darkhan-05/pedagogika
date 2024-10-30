@@ -12,8 +12,8 @@ defineProps({
   <Layout>
     <div class="container py-5">
       <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold text-primary">Таблица Лидеров</h1>
-        <p class="lead text-muted">Поздравляем лучших участников с наивысшими результатами!</p>
+        <h1 class="display-4 fw-bold text-primary">Көшбасшылар тақтасы</h1>
+        <p class="lead text-muted">Үздік қатысушыларды жоғары нәтижелермен құттықтаймыз!</p>
       </div>
 
       <div class="row justify-content-center">
@@ -24,7 +24,7 @@ defineProps({
               <thead class="table-dark">
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Имя</th>
+                  <th scope="col">Есім</th>
                   <th scope="col">Процент</th>
                 </tr>
               </thead>
