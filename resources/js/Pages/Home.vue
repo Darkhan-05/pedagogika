@@ -14,7 +14,7 @@ function startQuiz() {
       }
     });
   } else {
-    alert('Пожалуйста, введите имя');
+    alert('Есіміңізді енгізіңіз');
   }
 }
 </script>
@@ -24,10 +24,10 @@ function startQuiz() {
     <div class="px-4 py-5 my-5 text-center">
       <h1 class="display-5 fw-bold text-body-emphasis">Тест</h1>
       <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">Введите свое имя, чтобы начать викторину</p>
+        <p class="lead mb-4">Тестті бастау үшін атыңызды енгізіңіз</p>
         <div class="input-group mb-3">
-          <input type="text" v-model="username" class="form-control" placeholder="Ваше имя" aria-label="Ваше имя" />
-          <button @click="startQuiz" class="btn btn-primary btn-lg">Начать тест</button>
+          <input type="text" v-model="username" class="form-control" placeholder="Есіміңіз" aria-label="Есім" />
+          <button @click="startQuiz" class="btn btn-primary btn-lg">Тестті бастау</button>
         </div>
       </div>
     </div>
